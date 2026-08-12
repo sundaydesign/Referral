@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://microsoft.com"></script>
+    <style>
+        .dynamic-btn {
+            background-color: #0078d4;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- This is your actual clickable button inside the presentation -->
+    <button class="dynamic-btn" onclick="navigateDynamicURL()">See Referral Program</button>
+
+    <script>
+        Office.onReady(function (info) {
+            // Add-in is ready to use in PowerPoint Online
+        });
+
+        function navigateDynamicURL() {
+            // Get the current PDF's full URL
+            var fullUrl = window.location.href;
+
+            // Extract the uid parameter using a basic split
+            var ref_codeVal = "";
+            if (fullUrl.indexOf("ref_code=") !== -1) {
+                var parts = fullUrl.split("ref_code=")[1];
+                ref_codeVal = parts.split("&")[0]; // isolate the uid value
+            }
+
+            // Define your target base URL
+            var targetBase = "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=_MSOSAhWCU-58g5NWN60rLDY5boRiUtGh9DEk46C1F5UQlpOREZNSkVSM0xIVENETlg4MlU5MVlZRC4u&r06ff935c6ca44bfb9f3af3886c4111fd=";
+
+            // Open the new URL with the appended uid parameter
+            if (ref_codeVal !== "") {
+                 window.open(targetBase + "ref_code=" + ref_codeVal);
+            } else {
+                window.open(targetBase); // fallback if uid is missing
+            }
+        }
+    </script>
+</body>
+</html>
