@@ -21,11 +21,11 @@
 
     <script>
         Office.onReady(function (info) {
-            // Add-in is ready to use in PowerPoint Online
+            // Add-in is successfully initialized
         });
 
         function navigateDynamicURL() {
-           // Use the asynchronous method to fetch the true parent presentation URL
+            // Use the asynchronous method to fetch the true parent presentation URL
             Office.context.document.getFilePropertiesAsync(function (asyncResult) {
                 var ref_codeVal = "";
                 
@@ -38,10 +38,14 @@
 
                         // Extract the ref_code parameter properly
                         if (fullUrl.indexOf("ref_code=") !== -1) {
-                            // Split the URL string and grab the second chunk [1]
-                            var urlRemainder = fullUrl.split("ref_code=")[1];
-                            // Split again at the ampersand and grab the first chunk [0]
-                            ref_codeVal = urlRemainder.split("&")[0];
+                            // 1. Split the URL string at "ref_code="
+                            var urlParts = fullUrl.split("ref_code=");
+                            
+                            // 2. Extract the second chunk (index 1), which is a pure text string
+                            var textAfterRefCode = urlParts[1];
+                            
+                            // 3. Now split at the ampersand and grab the very first piece
+                            ref_codeVal = textAfterRefCode.split("&")[0];
                         }
                     }
                 }
