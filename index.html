@@ -21,37 +21,22 @@
 
     <script>
         Office.onReady(function (info) {
-            // Add-in is successfully initialized
+            // Add-in is ready to use in PowerPoint Online
         });
 
         function navigateDynamicURL() {
-            // Use the asynchronous method to fetch the true parent presentation URL
-            Office.context.document.getFilePropertiesAsync(function (asyncResult) {
-                var ref_codeVal = "";
-                
-                if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
-                    var fullUrl = asyncResult.value.url;
+            // Get the current PDF's full URL
+            var fullUrl = window.location.href;
 
-                    if (fullUrl) {
-                        // Decode symbols like %3F or %3D into clean characters
-                        fullUrl = decodeURIComponent(fullUrl);
+            // Extract the uid parameter using a basic split
+            var ref_codeVal = "";
+            if (fullUrl.indexOf("ref_code=") !== -1) {
+                var parts = fullUrl.split("ref_code=")[1];
+                ref_codeVal = parts.split("&")[0]; // isolate the uid value
+            }
 
-                        // Extract the ref_code parameter properly
-                        if (fullUrl.indexOf("ref_code=") !== -1) {
-                            // 1. Split the URL string at "ref_code="
-                            var urlParts = fullUrl.split("ref_code=");
-                            
-                            // 2. Extract the second chunk (index 1), which is a pure text string
-                            var textAfterRefCode = urlParts[1];
-                            
-                            // 3. Now split at the ampersand and grab the very first piece
-                            ref_codeVal = textAfterRefCode.split("&")[0];
-                        }
-                    }
-                }
-
-                // The target Microsoft Forms base URL string
-                var targetBase = "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=_MSOSAhWCU-58g5NWN60rLDY5boRiUtGh9DEk46C1F5UQlpOREZNSkVSM0xIVENETlg4MlU5MVlZRC4u&r06ff935c6ca44bfb9f3af3886c4111fd=";
+            // Define your target base URL
+            var targetBase = "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=_MSOSAhWCU-58g5NWN60rLDY5boRiUtGh9DEk46C1F5UQlpOREZNSkVSM0xIVENETlg4MlU5MVlZRC4u&r06ff935c6ca44bfb9f3af3886c4111fd=";
 
             // Open the new URL with the appended uid parameter
             if (ref_codeVal !== "") {
